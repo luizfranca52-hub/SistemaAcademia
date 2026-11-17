@@ -1,0 +1,188 @@
+Afazeres que surgiram:
+
+Criar método: Relatório() em pagamento e em quais classes achar necessário caso precise, em alguma hipótese, descrevê-la.
+Não sei como funciona os getters e setters para objetos, testar todos eles na classe main e ver se todos funcionam, mas não remover
+        pois podem ter uso futuro, só coloca um comentário do lado.
+
+Posso ter feito algumas classes com atributos id, tipo: id, idMatricula, idPagamento, mas resolvi colocar os próprios objetos dentro
+        das classes ex: int id  -> Aluno aluno, int idMatricula -> Matricula matricula
+
+
+Fase 2: Camada Model
+2.1 Enums
+[OK] StatusMatricula (ATIVA, TRANCADA, CANCELADA, VENCIDA)
+[OK] TipoPlano (MENSAL, TRIMESTRAL, SEMESTRAL, ANUAL), com atributo meses dentro do enum
+[OK] FormaPagamento (DINHEIRO, PIX, CARTAO_CREDITO, CARTAO_DEBITO)
+[OK] GrupoMuscular (PEITO, COSTAS, PERNAS, OMBROS, BRACOS, ABDOMEN)
+[OK] StatusEquipamento (DISPONIVEL, EM_MANUTENCAO, INATIVO)
+[OK] DiaSemana (usado em AulaColetiva, que não estava na sua lista)
+[OK] Opcional: dar aos enums um método getDescricao() para exibir texto amigável no menu
+
+
+2.2 Interface
+[OK] Autenticavel com autenticar(login, senha)
+
+2.3 Hierarquia de Pessoa
+[OK] Pessoa (abstrata): id, nome, cpf, dataNascimento, telefone, com construtor, getters/setters e método abstrato exibirResumo()
+[OK] Aluno: ativo, exibirResumo()
+[OK] Instrutor: cref, login, senha, salário, implementa Autenticavel e exibirResumo()
+[OK] Administrativo: cargo, login, senha, implementa Autenticavel e exibirResumo()
+[OK] Decidir o polimorfismo extra (calcularSalario() com regras diferentes) para reforçar na apresentação
+
+2.4 Demais classes
+[OK] Plano: id, nome, valor, tipo e calcularDuracaoEmMeses()
+[OK] Matricula: id, alunoId, planoId, dataInicio, dataFim, status, estaAtiva(), e o cálculo automático da dataFim a partir do plano
+[OK] Pagamento: id, matriculaId, valor, dataPagamento, forma
+[ ] Equipamento: id, nome, status
+[ ] Exercicio: id, nome, grupo, equipamentoId (opcional)
+[ ] Treino: id, alunoId, instrutorId, nome, objetivo, lista de ids de exercícios
+[ ] AulaColetiva: id, modalidade, instrutorId, dia, horario, vagas, lista de ids de alunos, com temVaga() e matricularAluno()
+[ ] AvaliacaoFisica: id, alunoId, instrutorId, data, peso, altura, percentualGordura, calcularImc()
+
+2.5 Decisões sobre relacionamentos
+[ ] Decidir se as classes guardam objetos ou só ids. Recomendo ids, pois facilita a persistência. A resolução da referência fica no controller.
+[ ] Implementar toString() e equals() onde fizer sentido
+[ ] Garantir encapsulamento (atributos privados, sem setter para o id)
+
+!!!!!Ao invés de ID's, eu escolhi colocar os próprios objetos como atributos!!!!
+
+
+Fase 3: Camada de persistência (repository)
+3.1 Infraestrutura
+[ ] Definir o formato das linhas: campo1|campo2|campo3, uma entidade por linha
+[ ] Decidir como tratar o caractere separador dentro dos textos (proibir | nos inputs ou escapar)
+[ ] Decidir como serializar listas (1;2;3) e datas (ISO yyyy-MM-dd)
+[ ] Criar a pasta data/ automaticamente se não existir
+[ ] Criar o arquivo vazio automaticamente na primeira execução
+3.2 ArquivoRepository<T> (classe base)
+[ ] Construtor recebendo o caminho do arquivo
+[ ] listarTodos(): lê as linhas, ignora linhas vazias e converte cada uma
+[ ] buscarPorId(id)
+[ ] salvar(obj): gera o próximo id e acrescenta a linha ao final
+[ ] atualizar(obj): reescreve o arquivo com a linha trocada
+[ ] remover(id): reescreve o arquivo sem a linha
+[ ] Métodos abstratos converterParaLinha() e converterDeLinha()
+[ ] Gerador de id: maior id existente + 1 (nunca reutilizar ids removidos)
+[ ] Tratar IOException (mensagem clara, sem derrubar o programa)
+[ ] Gravar com encoding UTF-8 para não quebrar acentos
+3.3 Repositories concretos
+[ ] AlunoRepository
+[ ] InstrutorRepository
+[ ] AdministrativoRepository
+[ ] PlanoRepository
+[ ] MatriculaRepository
+[ ] PagamentoRepository
+[ ] EquipamentoRepository
+[ ] ExercicioRepository
+[ ] TreinoRepository
+[ ] AulaColetivaRepository
+[ ] AvaliacaoFisicaRepository
+3.4 Casos delicados
+[ ] Como persistir a hierarquia de Pessoa: um arquivo por subclasse (mais simples) ou um único pessoas.txt com campo de tipo
+[ ] Enums: gravar o nome e converter de volta com valueOf, tratando valor inválido
+[ ] Linhas corrompidas: ignorar com aviso, em vez de travar o sistema
+[ ] Teste isolado: salvar, fechar o programa, reabrir e conferir que os dados voltam
+Fase 4: Camada de controller (regras de negócio)
+4.1 Cadastros
+[ ] AlunoController: cadastrar, listar, buscar por id/nome/CPF, atualizar, remover (ou inativar)
+[ ] InstrutorController: CRUD completo
+[ ] AdministrativoController: CRUD completo
+[ ] PlanoController: CRUD completo
+[ ] EquipamentoController e ExercicioController: CRUD simples
+[ ] TreinoController: criar, associar exercícios, listar por aluno
+[ ] AulaColetivaController: CRUD, inscrever e cancelar inscrição de aluno
+[ ] AvaliacaoFisicaController: registrar e listar o histórico por aluno
+4.2 Fluxos de negócio
+[ ] Matricular aluno: escolher aluno e plano, calcular dataFim pelo TipoPlano, criar a matrícula como ATIVA
+[ ] Registrar pagamento: vincular à matrícula, validar valor e forma
+[ ] Trancar, cancelar e reativar matrícula: respeitando a transição válida de status
+[ ] Verificar vencimento: ao listar ou ao iniciar, marcar como VENCIDA as matrículas com dataFim passada
+[ ] Inscrição em aula: bloquear se não houver vaga, se o aluno já estiver inscrito ou se a matrícula não estiver ativa
+[ ] Colocar equipamento em manutenção: bloquear o uso dele em novos exercícios
+4.3 Regras de integridade
+[ ] CPF único por pessoa
+[ ] Não remover aluno com matrícula ativa
+[ ] Não remover plano que tenha matrículas vinculadas
+[ ] Não remover instrutor que tenha treinos ou aulas (ou exigir reatribuição)
+[ ] Um aluno não pode ter duas matrículas ativas ao mesmo tempo
+[ ] Decidir e documentar o comportamento de remoção em cascata (ou a proibição dela)
+4.4 Autenticação
+[ ] AuthController: percorre instrutores e administrativos chamando autenticar() (polimorfismo via interface)
+[ ] Definir permissões por perfil (por exemplo, só Administrativo gerencia planos e pessoas; Instrutor gerencia treinos e avaliações)
+[ ] Limitar tentativas de login (ex.: 3)
+[ ] Cadastrar um administrador padrão no primeiro uso (seed), senão ninguém consegue logar
+Fase 5: Camada view (CLI)
+5.1 Infraestrutura de entrada e saída
+[ ] Classe utilitária de leitura segura: lerInt(), lerDouble(), lerData(), lerTexto(), lerEnum(), repetindo até a entrada ser válida
+[ ] Formatação de tabelas simples (colunas alinhadas) e de moeda
+[ ] Função de limpar tela ou separador visual entre telas
+[ ] Padrão de mensagens: sucesso, erro e confirmação (“Deseja mesmo remover? s/n”)
+5.2 Menus
+[ ] Tela de login
+[ ] Menu principal por perfil
+[ ] Submenu para cada entidade, com as opções: cadastrar, listar, buscar, atualizar, remover, voltar
+[ ] Menu de operações: matricular, registrar pagamento, inscrever em aula, registrar avaliação
+[ ] Opção “Sair” que encerra com segurança
+5.3 Boas práticas
+[ ] A view não contém regra de negócio nem acessa o repository
+[ ] Seleção de enum numerada (1 - PIX, 2 - DINHEIRO...)
+[ ] Ao escolher aluno ou plano, mostrar a lista antes de pedir o id
+[ ] Permitir cancelar a operação no meio do cadastro
+Fase 6: Demonstração dos requisitos obrigatórios
+
+Esta fase garante que o professor consiga enxergar cada requisito.
+
+[ ] Herança: Pessoa → Aluno, Instrutor, Administrativo
+[ ] Polimorfismo: uma tela que lista todas as pessoas (List<Pessoa>) e chama exibirResumo(), e/ou um cálculo de salário
+[ ] Interface: Autenticavel usada no login sem saber se é Instrutor ou Administrativo
+[ ] Enums: usados em atributos, em menus e na persistência
+[ ] Mínimo de classes: contar as classes de model e conferir com o professor
+[ ] Montar uma tabela “requisito → onde está no código” para usar na apresentação
+Fase 7: Validações e tratamento de erros
+[ ] Validar CPF (formato e dígitos verificadores) e telefone
+[ ] Validar datas (nascimento no passado, dataFim maior que dataInicio)
+[ ] Validar valores (preço positivo, peso e altura plausíveis, vagas maiores que zero)
+[ ] Validar campos obrigatórios (nome não vazio)
+[ ] Criar exceções próprias (RegraNegocioException, EntidadeNaoEncontradaException) e tratá-las na view
+[ ] Garantir que nenhuma entrada do usuário derrube o programa (letra onde se espera número, id inexistente, linha vazia)
+[ ] Proteger a senha: no mínimo não exibi-la nas listagens (idealmente guardar um hash)
+Fase 8: Testes
+[ ] Roteiro de testes manuais por entidade: criar, listar, buscar, editar, remover, reiniciar o programa e conferir
+[ ] Testes dos cenários de erro: id inexistente, CPF duplicado, plano em uso, aula lotada, login errado
+[ ] Teste do ciclo completo: cadastrar aluno → plano → matrícula → pagamento → aula → avaliação
+[ ] Teste com arquivo vazio, arquivo com linha corrompida e pasta data/ inexistente
+[ ] Testes unitários dos pontos críticos, se a disciplina permitir: calcularImc(), calcularDuracaoEmMeses(), temVaga(), autenticar() e conversão de linha
+[ ] Gerar dados de exemplo (seed) para a demonstração não depender de cadastro manual na hora
+Fase 9: Documentação e entrega
+[ ] UML final de classes, atualizado com o que foi realmente implementado (model, interface e enums)
+[ ] UML ou diagrama de camadas (view → controller → repository → model)
+[ ] README completo: requisitos, como compilar, como executar, usuário e senha de teste
+[ ] Documento dos formatos dos arquivos txt (campos de cada um)
+[ ] Lista de regras de negócio implementadas
+[ ] Comentários objetivos no código, principalmente em regras não óbvias
+[ ] Limpar o código: remover trechos mortos, prints de debug e imports não usados
+[ ] Conferir se o projeto roda em uma máquina limpa (clonar o repositório, compilar e executar)
+[ ] Conferir o formato exigido de entrega (zip, link do Git, relatório)
+Fase 10: Apresentação
+[ ] Preparar um roteiro de demonstração de 5 a 10 minutos: login → cadastro → matrícula → pagamento → aula → persistência (fechar e reabrir)
+[ ] Preparar uma explicação de cada requisito, apontando a classe no código
+[ ] Explicar as decisões de arquitetura (por que a camada de repository é separada, por que ids em vez de objetos)
+[ ] Preparar respostas para perguntas prováveis: “o que acontece se eu apagar um plano em uso?”, “como o polimorfismo aparece aqui?”, “como os dados são salvos?”
+[ ] Ensaiar o fluxo completo pelo menos uma vez com os dados de seed
+Ordem prática de execução (resumo)
+Fases 0 e 1 (planejar e montar o esqueleto)
+Enums, interface e Pessoa + subclasses
+ArquivoRepository + AlunoRepository + um CRUD de ponta a ponta (model → repository → controller → view) para Aluno
+Replicar o padrão para Plano, Matricula e Pagamento, e depois a autenticação
+Demais entidades (Treino, Exercicio, Equipamento, AulaColetiva, AvaliacaoFisica)
+Validações, tratamento de erros e testes
+Documentação, ensaio e entrega
+
+O ponto-chave é fechar um CRUD completo e funcionando (Aluno) antes de começar os outros. Os demais copiam o mesmo padrão, e qualquer erro de arquitetura aparece cedo, quando ainda é barato corrigir.
+
+esse metodo autenticar retorna bool ou void(da interface)
+
+Retorna boolean. Na interface ficou assim:
+
+java
+public
