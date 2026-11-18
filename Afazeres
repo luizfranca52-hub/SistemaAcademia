@@ -33,11 +33,11 @@ Fase 2: Camada Model
 [OK] Plano: id, nome, valor, tipo e calcularDuracaoEmMeses()
 [OK] Matricula: id, alunoId, planoId, dataInicio, dataFim, status, estaAtiva(), e o cálculo automático da dataFim a partir do plano
 [OK] Pagamento: id, matriculaId, valor, dataPagamento, forma
-[ ] Equipamento: id, nome, status
-[ ] Exercicio: id, nome, grupo, equipamentoId (opcional)
-[ ] Treino: id, alunoId, instrutorId, nome, objetivo, lista de ids de exercícios
-[ ] AulaColetiva: id, modalidade, instrutorId, dia, horario, vagas, lista de ids de alunos, com temVaga() e matricularAluno()
-[ ] AvaliacaoFisica: id, alunoId, instrutorId, data, peso, altura, percentualGordura, calcularImc()
+[OK] Equipamento: id, nome, status
+[OK] Exercicio: id, nome, grupo, equipamentoId (opcional)
+[OK] Treino: id, alunoId, instrutorId, nome, objetivo, lista de ids de exercícios
+[OK] AulaColetiva: id, modalidade, instrutorId, dia, horario, vagas, lista de ids de alunos, com temVaga() e matricularAluno()
+[OK] AvaliacaoFisica: id, alunoId, instrutorId, data, peso, altura, percentualGordura, calcularImc()
 
 2.5 Decisões sobre relacionamentos
 [ ] Decidir se as classes guardam objetos ou só ids. Recomendo ids, pois facilita a persistência. A resolução da referência fica no controller.
