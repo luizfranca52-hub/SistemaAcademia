@@ -47,13 +47,14 @@ Fase 2: Camada Model
 !!!!!Ao invés de ID's, eu escolhi colocar os próprios objetos como atributos!!!!
 
 
-Fase 3: Camada de persistência (repository)
+Fase 3: persistência (repository)
 3.1 Infraestrutura
 [ ] Definir o formato das linhas: campo1|campo2|campo3, uma entidade por linha
 [ ] Decidir como tratar o caractere separador dentro dos textos (proibir | nos inputs ou escapar)
 [ ] Decidir como serializar listas (1;2;3) e datas (ISO yyyy-MM-dd)
 [ ] Criar a pasta data/ automaticamente se não existir
 [ ] Criar o arquivo vazio automaticamente na primeira execução
+
 3.2 ArquivoRepository<T> (classe base)
 [ ] Construtor recebendo o caminho do arquivo
 [ ] listarTodos(): lê as linhas, ignora linhas vazias e converte cada uma
@@ -65,6 +66,7 @@ Fase 3: Camada de persistência (repository)
 [ ] Gerador de id: maior id existente + 1 (nunca reutilizar ids removidos)
 [ ] Tratar IOException (mensagem clara, sem derrubar o programa)
 [ ] Gravar com encoding UTF-8 para não quebrar acentos
+
 3.3 Repositories concretos
 [ ] AlunoRepository
 [ ] InstrutorRepository
@@ -77,6 +79,7 @@ Fase 3: Camada de persistência (repository)
 [ ] TreinoRepository
 [ ] AulaColetivaRepository
 [ ] AvaliacaoFisicaRepository
+
 3.4 Casos delicados
 [ ] Como persistir a hierarquia de Pessoa: um arquivo por subclasse (mais simples) ou um único pessoas.txt com campo de tipo
 [ ] Enums: gravar o nome e converter de volta com valueOf, tratando valor inválido
@@ -169,20 +172,3 @@ Fase 10: Apresentação
 [ ] Explicar as decisões de arquitetura (por que a camada de repository é separada, por que ids em vez de objetos)
 [ ] Preparar respostas para perguntas prováveis: “o que acontece se eu apagar um plano em uso?”, “como o polimorfismo aparece aqui?”, “como os dados são salvos?”
 [ ] Ensaiar o fluxo completo pelo menos uma vez com os dados de seed
-Ordem prática de execução (resumo)
-Fases 0 e 1 (planejar e montar o esqueleto)
-Enums, interface e Pessoa + subclasses
-ArquivoRepository + AlunoRepository + um CRUD de ponta a ponta (model → repository → controller → view) para Aluno
-Replicar o padrão para Plano, Matricula e Pagamento, e depois a autenticação
-Demais entidades (Treino, Exercicio, Equipamento, AulaColetiva, AvaliacaoFisica)
-Validações, tratamento de erros e testes
-Documentação, ensaio e entrega
-
-O ponto-chave é fechar um CRUD completo e funcionando (Aluno) antes de começar os outros. Os demais copiam o mesmo padrão, e qualquer erro de arquitetura aparece cedo, quando ainda é barato corrigir.
-
-esse metodo autenticar retorna bool ou void(da interface)
-
-Retorna boolean. Na interface ficou assim:
-
-java
-public

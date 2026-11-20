@@ -1,32 +1,42 @@
 import model.*;
+import repository.AlunoArquivo;
+import repository.InstrutorArquivo;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 public class Main {
     void main() {
-        Aluno aluno = new Aluno(21, "Kike", "073548424-43", LocalDate.of(2005, 3, 21),"567890678", "Kikelogin", "Senhakike" );
-        Plano plano = new Plano(21, "Normal", 200, TipoPlano.ANUAL);
-        Matricula matricula = new Matricula(21, aluno, plano, LocalDate.of(2026, 11, 17), StatusMatricula.ATIVA);
-        Pagamento pagamento = new Pagamento(aluno, matricula, plano.getValor(), LocalDate.of(2026, 11, 17), FormaPagamento.CARTAO_CREDITO);
+        AlunoArquivo repositorio = new AlunoArquivo("alunos.txt");
 
-       Instrutor instrutor = new Instrutor("234", "rafa", "1234", 700, 23, "Rafael", "23456", LocalDate.of(2012, 12, 10), "23456" );
-       Equipamento alther = new Equipamento("Alther", StatusEquipamento.DISPONIVEL);
-       Exercicio e1 = new Exercicio("supino", GrupoMuscular.PEITO, 12, 10, alther);
-        Exercicio e2 = new Exercicio("crucifixo", GrupoMuscular.PEITO, 25, 10);
+        Aluno aluno1 = new Aluno(
+                1, "Luiz", "12345678900",
+                LocalDate.of(2005, 5, 20),
+                "84999999999", "luiz123", "senha123"
+        );
 
-        Treino treino = new Treino(12, aluno, instrutor, "peito");
-        treino.adicionarExercicio(e1);
-        treino.adicionarExercicio(e2);
-        treino.papelTreino();
+        Aluno aluno2 = new Aluno(
+                2, "Carlos", "98765432100",
+                LocalDate.of(2004, 8, 15),
+                "84988888888", "carlos123", "senha456"
+        );
+
+    repositorio.salvar(aluno2);
+    repositorio.salvar(aluno1);
 
 
-        AulaColetiva aula = new AulaColetiva( "Spinning", instrutor, List.of(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY), LocalTime.of(18, 0), 20);
+    InstrutorArquivo repo = new InstrutorArquivo("instrutores1.txt");
+    Instrutor instrutor1 = new Instrutor("12", "sarah", "aba", 1234.00, 123, "Sarah", "1234567", LocalDate.of(2005, 5, 20) ,"12345678");
+        Instrutor instrutor3 = new Instrutor("10", "adriana", "abi", 123.00, 153, "Adriana", "1234867", LocalDate.of(2005, 5, 20) ,"12345678");
 
-        aula.matricularAluno(aluno);
-        aula.matricularAluno(aluno);
-        System.out.println(aula.getAlunos().size());
+        Instrutor instrutor2 = new Instrutor("11", "rafinha", "abo", 123.00, 153, "Rafael", "1234867", LocalDate.of(2005, 5, 20) ,"12345678");
+    repo.salvar(instrutor1);
+    repo.salvar(instrutor2);
+    repo.salvar(instrutor3);
+
+    repo.remover("12");
     }
 }

@@ -16,12 +16,8 @@ public class Aluno extends Pessoa implements Autenticavel{
         System.out.println("O nome do aluno é: " + this.nome + " Ele nasceu em: " + this.dataNascimento + " \nPara entrar em contato: "+ this.telefone);
     }
 
-    public boolean autenticar(String login, String senha){
-        if(login == this.login && senha == this.senha){
-            return true;
-        }
-        return false;
-    }
+    @Override
+    public boolean autenticar(String login, String senha) { return this.login.equals(login) && this.senha.equals(senha);}
 
     public String getLogin() {
         return login;
