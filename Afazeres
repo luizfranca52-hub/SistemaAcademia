@@ -49,32 +49,32 @@ Fase 2: Camada Model
 
 Fase 3: persistência (repository)
 3.1 Infraestrutura
-[ ] Definir o formato das linhas: campo1|campo2|campo3, uma entidade por linha
-[ ] Decidir como tratar o caractere separador dentro dos textos (proibir | nos inputs ou escapar)
-[ ] Decidir como serializar listas (1;2;3) e datas (ISO yyyy-MM-dd)
-[ ] Criar a pasta data/ automaticamente se não existir
-[ ] Criar o arquivo vazio automaticamente na primeira execução
+[OK] Definir o formato das linhas: campo1|campo2|campo3, uma entidade por linha
+[OK] Decidir como tratar o caractere separador dentro dos textos (proibir | nos inputs ou escapar)
+[OK] Decidir como serializar listas (1;2;3) e datas (ISO yyyy-MM-dd)
+[OK] Criar a pasta data/ automaticamente se não existir
+[OK] Criar o arquivo vazio automaticamente na primeira execução
 
 3.2 ArquivoRepository<T> (classe base)
-[ ] Construtor recebendo o caminho do arquivo
-[ ] listarTodos(): lê as linhas, ignora linhas vazias e converte cada uma
-[ ] buscarPorId(id)
-[ ] salvar(obj): gera o próximo id e acrescenta a linha ao final
-[ ] atualizar(obj): reescreve o arquivo com a linha trocada
-[ ] remover(id): reescreve o arquivo sem a linha
-[ ] Métodos abstratos converterParaLinha() e converterDeLinha()
-[ ] Gerador de id: maior id existente + 1 (nunca reutilizar ids removidos)
-[ ] Tratar IOException (mensagem clara, sem derrubar o programa)
-[ ] Gravar com encoding UTF-8 para não quebrar acentos
+[OK] Construtor recebendo o caminho do arquivo
+[OK] listarTodos(): lê as linhas, ignora linhas vazias e converte cada uma
+[OK] buscarPorId(id)
+[OK] salvar(obj): gera o próximo id e acrescenta a linha ao final
+[OK] atualizar(obj): reescreve o arquivo com a linha trocada
+[OK] remover(id): reescreve o arquivo sem a linha
+[OK] Métodos abstratos converterParaLinha() e converterDeLinha()
+[OK] Gerador de id: maior id existente + 1 (nunca reutilizar ids removidos)
+[OK] Tratar IOException (mensagem clara, sem derrubar o programa)
+[OK] Gravar com encoding UTF-8 para não quebrar acentos
 
 3.3 Repositories concretos
-[ ] AlunoRepository
-[ ] InstrutorRepository
-[ ] AdministrativoRepository
-[ ] PlanoRepository
-[ ] MatriculaRepository
-[ ] PagamentoRepository
-[ ] EquipamentoRepository
+[OK] AlunoRepository
+[OK] InstrutorRepository
+[OK] AdministrativoRepository
+[OK] PlanoRepository
+[OK] MatriculaRepository
+[OK] PagamentoRepository
+[OK] EquipamentoRepository
 [ ] ExercicioRepository
 [ ] TreinoRepository
 [ ] AulaColetivaRepository

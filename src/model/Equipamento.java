@@ -1,12 +1,22 @@
 package model;
 
 public class Equipamento {
+    private int id;
     private String nome;
     private StatusEquipamento status;
 
-    public Equipamento(String nome, StatusEquipamento status) {
+    public Equipamento(int id, String nome, StatusEquipamento status) {
+        this.id = id;
         this.nome = nome;
         this.status = status;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNome() {

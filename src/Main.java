@@ -1,42 +1,183 @@
-import model.*;
-import repository.AlunoArquivo;
-import repository.InstrutorArquivo;
 
-import java.time.DayOfWeek;
+import model.*;
+import repository.*;
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.List;
-import java.util.Optional;
 
 public class Main {
-    void main() {
-        AlunoArquivo repositorio = new AlunoArquivo("alunos.txt");
 
-        Aluno aluno1 = new Aluno(
-                1, "Luiz", "12345678900",
-                LocalDate.of(2005, 5, 20),
-                "84999999999", "luiz123", "senha123"
+    public static void main(String[] args) {
+
+        // ==========================================
+        // TESTE 1 - CARREGAR OS REPOSITÓRIOS
+        // ==========================================
+
+        AlunoArquivo alunoRepo = new AlunoArquivo("alunos.txt");
+
+        PlanoArquivo planoRepo = new PlanoArquivo("Plano.txt");
+
+        MatriculaArquivo matriculaRepo = new MatriculaArquivo(
+                "matriculas_teste.txt",
+                alunoRepo,
+                planoRepo
         );
 
-        Aluno aluno2 = new Aluno(
-                2, "Carlos", "98765432100",
-                LocalDate.of(2004, 8, 15),
-                "84988888888", "carlos123", "senha456"
+        System.out.println("===== TESTE 1: REPOSITÓRIOS =====");
+
+        System.out.println("Alunos carregados: " + alunoRepo.listarTodos().size());
+        System.out.println("Planos carregados: " + planoRepo.listarTodos().size());
+
+
+        // ==========================================
+        // TESTE 2 - CRIAR MATRÍCULA
+        // ==========================================
+
+        try {
+            Files.deleteIfExists(Paths.get("matriculas_teste.txt"));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Recriar o repositório com arquivo vazio
+        matriculaRepo = new MatriculaArquivo(
+                "matriculas_teste.txt",
+                alunoRepo,
+                planoRepo
         );
 
-    repositorio.salvar(aluno2);
-    repositorio.salvar(aluno1);
+        // Substitua pelos IDs existentes nos seus arquivos
+        Aluno aluno = alunoRepo.buscarPorId(1).orElseThrow();
+        Plano plano = planoRepo.buscarPorId(2).orElseThrow();
+
+        Matricula m1 = new Matricula(
+                1,
+                aluno,
+                plano,
+                LocalDate.of(2026, 11, 21),
+                StatusMatricula.ATIVA
+        );
+
+        matriculaRepo.salvar(m1);
+
+        System.out.println("\n===== TESTE 2: SALVAR MATRÍCULA =====");
+
+        System.out.println("Matrícula salva? " + matriculaRepo.existePorId(1));
 
 
-    InstrutorArquivo repo = new InstrutorArquivo("instrutores1.txt");
-    Instrutor instrutor1 = new Instrutor("12", "sarah", "aba", 1234.00, 123, "Sarah", "1234567", LocalDate.of(2005, 5, 20) ,"12345678");
-        Instrutor instrutor3 = new Instrutor("10", "adriana", "abi", 123.00, 153, "Adriana", "1234867", LocalDate.of(2005, 5, 20) ,"12345678");
+        // ==========================================
+        // TESTE 3 - BUSCAR POR ID
+        // ==========================================
 
-        Instrutor instrutor2 = new Instrutor("11", "rafinha", "abo", 123.00, 153, "Rafael", "1234867", LocalDate.of(2005, 5, 20) ,"12345678");
-    repo.salvar(instrutor1);
-    repo.salvar(instrutor2);
-    repo.salvar(instrutor3);
+        System.out.println("\n===== TESTE 3: BUSCAR POR ID =====");
 
-    repo.remover("12");
-    }
-}
+        System.out.println("ID 1: " + matriculaRepo.buscarPorId(1));
+        System.out.println("ID 999: " + matriculaRepo.buscarPorId(999));
+
+
+        // ==========================================
+        // TESTE 4 - BUSCAR POR ALUNO
+        // ==========================================
+
+        System.out.println("\n===== TESTE 4: BUSCAR POR ALUNO =====");
+
+        System.out.println(
+                matriculaRepo.buscarPorAluno(aluno.getId())
+        );
+
+
+        // ==========================================
+        // TESTE 5 - BUSCAR POR PLANO
+        // ==========================================
+
+        System.out.println("\n===== TESTE 5: BUSCAR POR PLANO =====");
+
+        System.out.println(
+                matriculaRepo.buscarPorPlano(plano.getId())
+        );
+
+
+        // ==========================================
+        // TESTE 6 - BUSCAR POR STATUS
+        // ==========================================
+
+        System.out.println("\n===== TESTE 6: BUSCAR POR STATUS =====");
+
+        System.out.println(
+                matriculaRepo.buscarPorStatus(StatusMatricula.ATIVA)
+        );
+
+
+        // ==========================================
+        // TESTE 7 - LISTAR ATIVAS
+        // ==========================================
+
+        System.out.println("\n===== TESTE 7: LISTAR ATIVAS =====");
+
+        System.out.println(matriculaRepo.listarAtivas());
+
+
+        // ==========================================
+        // TESTE 8 - VERIFICAR ARQUIVO
+        // ==========================================
+
+        System.out.println("\n===== TESTE 8: CONTEÚDO DO ARQUIVO =====");
+
+        try {
+            Files.readAllLines(Paths.get("matriculas_teste.txt"))
+                    .forEach(System.out::println);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        // ==========================================
+        // TESTE 9 - RECARREGAR ARQUIVO
+        // ==========================================
+
+        System.out.println("\n===== TESTE 9: RECARREGAR =====");
+
+        MatriculaArquivo repo2 = new MatriculaArquivo(
+                "matriculas_teste.txt",
+                alunoRepo,
+                planoRepo
+        );
+
+        System.out.println("Matrícula existe? " + repo2.existePorId(1));
+
+        System.out.println("Matrícula recuperada: " + repo2.buscarPorId(1));
+
+        System.out.println("Aluno recuperado: " +
+                repo2.buscarPorId(1).orElseThrow().getAluno().getNome());
+
+        System.out.println("Plano recuperado: " +
+                repo2.buscarPorId(1).orElseThrow().getPlano().getNome());
+
+
+//        // ==========================================
+//        // TESTE 10 - REMOVER
+//        // ==========================================
+//
+//        System.out.println("\n===== TESTE 10: REMOVER =====");
+//
+//        repo2.remover(1);
+//
+//        System.out.println("Existe após remover? " + repo2.existePorId(1));
+//
+//
+//        // ==========================================
+//        // TESTE 11 - VERIFICAR PERSISTÊNCIA DA REMOÇÃO
+//        // ==========================================
+//
+//        System.out.println("\n===== TESTE 11: RECARREGAR APÓS REMOÇÃO =====");
+//
+//        MatriculaArquivo repo3 = new MatriculaArquivo(
+//                "matriculas_teste.txt",
+//                alunoRepo,
+//                planoRepo
+//        );
+//
+//        System.out.println("Existe após recarregar? " + repo3.existePorId(1));
+//    }
+}}

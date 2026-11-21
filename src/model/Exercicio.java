@@ -16,7 +16,7 @@ public class Exercicio {
     }
 
     public Exercicio(String nome, GrupoMuscular grupoMuscular, int peso, int repeticoes){
-        this(nome, grupoMuscular, peso, repeticoes, new Equipamento("Livre", StatusEquipamento.DISPONIVEL));
+        this(nome, grupoMuscular, peso, repeticoes, new Equipamento(-1, "Livre", StatusEquipamento.DISPONIVEL));
     }
 
     public String getNome() {

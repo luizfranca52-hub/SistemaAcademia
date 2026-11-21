@@ -37,8 +37,8 @@ public class AlunoArquivo extends AlunoRepository {
     }
 
     @Override
-    public void remover(String cpf) {
-        super.remover(cpf);
+    public void remover(Integer id) {
+        super.remover(id);
         gravar();
     }
 
