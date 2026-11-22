@@ -40,9 +40,9 @@ Fase 2: Camada Model
 [OK] AvaliacaoFisica: id, alunoId, instrutorId, data, peso, altura, percentualGordura, calcularImc()
 
 2.5 Decisões sobre relacionamentos
-[ ] Decidir se as classes guardam objetos ou só ids. Recomendo ids, pois facilita a persistência. A resolução da referência fica no controller.
+[OK] Decidir se as classes guardam objetos ou só ids. Recomendo ids, pois facilita a persistência. A resolução da referência fica no controller.
 [ ] Implementar toString() e equals() onde fizer sentido
-[ ] Garantir encapsulamento (atributos privados, sem setter para o id)
+[OK] Garantir encapsulamento (atributos privados, sem setter para o id)
 
 !!!!!Ao invés de ID's, eu escolhi colocar os próprios objetos como atributos!!!!
 
@@ -75,16 +75,17 @@ Fase 3: persistência (repository)
 [OK] MatriculaRepository
 [OK] PagamentoRepository
 [OK] EquipamentoRepository
-[ ] ExercicioRepository
-[ ] TreinoRepository
-[ ] AulaColetivaRepository
-[ ] AvaliacaoFisicaRepository
+[OK] ExercicioRepository
+[OK] TreinoRepository
+[OK] AulaColetivaRepository
+[OK] AvaliacaoFisicaRepository
 
 3.4 Casos delicados
-[ ] Como persistir a hierarquia de Pessoa: um arquivo por subclasse (mais simples) ou um único pessoas.txt com campo de tipo
-[ ] Enums: gravar o nome e converter de volta com valueOf, tratando valor inválido
-[ ] Linhas corrompidas: ignorar com aviso, em vez de travar o sistema
-[ ] Teste isolado: salvar, fechar o programa, reabrir e conferir que os dados voltam
+[OK] Como persistir a hierarquia de Pessoa: um arquivo por subclasse (mais simples) ou um único pessoas.txt com campo de tipo
+[OK] Enums: gravar o nome e converter de volta com valueOf, tratando valor inválido
+[OK] Linhas corrompidas: ignorar com aviso, em vez de travar o sistema
+[Ok] Teste isolado: salvar, fechar o programa, reabrir e conferir que os dados voltam
+
 Fase 4: Camada de controller (regras de negócio)
 4.1 Cadastros
 [ ] AlunoController: cadastrar, listar, buscar por id/nome/CPF, atualizar, remover (ou inativar)
@@ -95,6 +96,7 @@ Fase 4: Camada de controller (regras de negócio)
 [ ] TreinoController: criar, associar exercícios, listar por aluno
 [ ] AulaColetivaController: CRUD, inscrever e cancelar inscrição de aluno
 [ ] AvaliacaoFisicaController: registrar e listar o histórico por aluno
+
 4.2 Fluxos de negócio
 [ ] Matricular aluno: escolher aluno e plano, calcular dataFim pelo TipoPlano, criar a matrícula como ATIVA
 [ ] Registrar pagamento: vincular à matrícula, validar valor e forma
@@ -102,6 +104,7 @@ Fase 4: Camada de controller (regras de negócio)
 [ ] Verificar vencimento: ao listar ou ao iniciar, marcar como VENCIDA as matrículas com dataFim passada
 [ ] Inscrição em aula: bloquear se não houver vaga, se o aluno já estiver inscrito ou se a matrícula não estiver ativa
 [ ] Colocar equipamento em manutenção: bloquear o uso dele em novos exercícios
+
 4.3 Regras de integridade
 [ ] CPF único por pessoa
 [ ] Não remover aluno com matrícula ativa
@@ -109,11 +112,13 @@ Fase 4: Camada de controller (regras de negócio)
 [ ] Não remover instrutor que tenha treinos ou aulas (ou exigir reatribuição)
 [ ] Um aluno não pode ter duas matrículas ativas ao mesmo tempo
 [ ] Decidir e documentar o comportamento de remoção em cascata (ou a proibição dela)
+
 4.4 Autenticação
 [ ] AuthController: percorre instrutores e administrativos chamando autenticar() (polimorfismo via interface)
 [ ] Definir permissões por perfil (por exemplo, só Administrativo gerencia planos e pessoas; Instrutor gerencia treinos e avaliações)
 [ ] Limitar tentativas de login (ex.: 3)
 [ ] Cadastrar um administrador padrão no primeiro uso (seed), senão ninguém consegue logar
+
 Fase 5: Camada view (CLI)
 5.1 Infraestrutura de entrada e saída
 [ ] Classe utilitária de leitura segura: lerInt(), lerDouble(), lerData(), lerTexto(), lerEnum(), repetindo até a entrada ser válida

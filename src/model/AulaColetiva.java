@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AulaColetiva {
+    private int id;
     private String modalidade;
     private Instrutor instrutor;
     private List<DayOfWeek> dias;
@@ -14,7 +15,8 @@ public class AulaColetiva {
     private int vagas;
     private List<Aluno> alunos;
 
-    public AulaColetiva(String modalidade, Instrutor instrutor, List<DayOfWeek> dias, LocalTime horario, int vagas) {
+    public AulaColetiva(int id, String modalidade, Instrutor instrutor, List<DayOfWeek> dias, LocalTime horario, int vagas) {
+        this.id = id;
         this.modalidade = modalidade;
         this.instrutor = instrutor;
         this.dias = new ArrayList<>(dias);
@@ -35,8 +37,13 @@ public class AulaColetiva {
         return true;
     }
 
+    public int getId() {
+        return id;
+    }
 
-
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getModalidade() {
         return modalidade;

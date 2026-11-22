@@ -3,12 +3,14 @@ package model;
 import java.util.ArrayList;
 
 public class Treino {
+    private int id;
     private String objetivo;
     private Aluno aluno;
     private Instrutor instrutor;
-    public ArrayList<Exercicio> exercicios;
+    private ArrayList<Exercicio> exercicios;
 
     public Treino(int id, Aluno aluno, Instrutor instrutor, String objetivo) {
+        this.id = id;
         this.aluno = aluno;
         this.instrutor = instrutor;
         this.objetivo = objetivo;
@@ -33,6 +35,18 @@ public class Treino {
         for(int i = 0; i < exercicios.size(); i++){
             System.out.println((i+1) + ": "+ exercicios.get(i).getNome()+ " "+ exercicios.get(i).getEquipamento().getNome()+ " " + exercicios.get(i).getPeso()+ " kg "+ exercicios.get(i).getRepeticoes());
         }
+    }
+
+    public void setExercicios(ArrayList<Exercicio> exercicios) {
+        this.exercicios = exercicios;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getObjetivo() {

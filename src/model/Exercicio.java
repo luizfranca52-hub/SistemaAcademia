@@ -1,13 +1,15 @@
 package model;
 
 public class Exercicio {
+    private int id;
     private String nome;
     private GrupoMuscular grupoMuscular;
-    private int peso;
+    private double peso;
     private Equipamento equipamento;
     private int repeticoes;
 
-    public Exercicio(String nome, GrupoMuscular grupoMuscular, int peso, int repeticoes, Equipamento equipamento) {
+    public Exercicio(int id, String nome, GrupoMuscular grupoMuscular, double peso, Equipamento equipamento, int repeticoes) {
+        this.id = id;
         this.nome = nome;
         this.grupoMuscular = grupoMuscular;
         this.peso = peso;
@@ -15,8 +17,16 @@ public class Exercicio {
         this.repeticoes = repeticoes;
     }
 
-    public Exercicio(String nome, GrupoMuscular grupoMuscular, int peso, int repeticoes){
-        this(nome, grupoMuscular, peso, repeticoes, new Equipamento(-1, "Livre", StatusEquipamento.DISPONIVEL));
+    public Exercicio(int id, String nome, GrupoMuscular grupoMuscular, int peso, int repeticoes){
+        this(id, nome, grupoMuscular, peso, new Equipamento(-1, "Livre", StatusEquipamento.DISPONIVEL), repeticoes);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -35,7 +45,7 @@ public class Exercicio {
         this.grupoMuscular = grupoMuscular;
     }
 
-    public int getPeso() {
+    public double getPeso() {
         return peso;
     }
 

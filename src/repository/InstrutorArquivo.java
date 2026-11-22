@@ -40,8 +40,8 @@ public class InstrutorArquivo extends InstrutorRepository{
     }
 
     @Override
-    public void remover(String cref) {
-        super.remover(cref);
+    public void remover(Integer id) {
+        super.remover(id);
         gravar();
     }
 
@@ -56,7 +56,6 @@ public class InstrutorArquivo extends InstrutorRepository{
         }
     }
 
-    // Formato que a classe pede: id;nome;cpf;dataNascimento;telefone;login;senha
     private String paraLinha(Instrutor i) {
 
         return String.join(";",

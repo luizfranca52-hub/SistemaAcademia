@@ -3,13 +3,15 @@
     import java.time.LocalDate;
 
     public class AvaliacaoFisica {
+        private int id;
         private Aluno aluno;
         private Instrutor instrutor;
         private LocalDate data;
         private double peso;
         private double altura;
 
-        public AvaliacaoFisica(Aluno aluno, Instrutor instrutor, LocalDate data, double peso, double altura) {
+        public AvaliacaoFisica(int id, Aluno aluno, Instrutor instrutor, LocalDate data, double peso, double altura) {
+            this.id = id;
             this.aluno = aluno;
             this.instrutor = instrutor;
             this.data = data;
@@ -30,7 +32,13 @@
         }
 
 
+        public int getId() {
+            return id;
+        }
 
+        public void setId(int id) {
+            this.id = id;
+        }
 
         public Aluno getAluno() {
             return aluno;
