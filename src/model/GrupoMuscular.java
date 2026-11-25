@@ -1,8 +1,14 @@
 package model;
 
 public enum GrupoMuscular {
+    BICEPS,
+    DORSAL,
     PEITO,
-    COSTAS,
-    PERNAS,
+    TRICEPS,
+    OMBRO,
+    QUADRICEPS,
+    GLUTEO,
+    POSTERIOR,
+    CARDIO,
     FULLBODY
 }
