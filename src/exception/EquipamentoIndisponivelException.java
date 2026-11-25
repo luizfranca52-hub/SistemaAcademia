@@ -1,6 +1,6 @@
 package exception;
 
-// Lançada quando o equipamento está em manutenção ou inativo
+// qnd o equipamento ta em manutenção ou inativo
 public class EquipamentoIndisponivelException extends RegraNegocioException {
 
     public EquipamentoIndisponivelException(String mensagem) {

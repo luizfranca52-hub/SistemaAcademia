@@ -22,7 +22,7 @@ public class PagamentoCartao extends Pagamento {
         this.credito = credito;
     }
 
-    // crédito acima de 3 parcelas tem 10% de juros
+    // crédito acima de 3x tem 10% de juros
     @Override
     public double calcularValorFinal() {
         if (credito && parcelas > 3) {

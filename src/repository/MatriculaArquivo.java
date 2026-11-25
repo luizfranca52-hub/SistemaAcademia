@@ -20,7 +20,7 @@ public class MatriculaArquivo extends MatriculaRepository {
     private final PlanoRepository planoRepository;
     private final RecepcionistaRepository recepcionistaRepository;
 
-    // construtor antigo continua funcionando (sem recepcionista)
+    // construtor antigo, sem recepcionista
     public MatriculaArquivo(String caminho, AlunoRepository alunoRepository, PlanoRepository planoRepository) {
         this(caminho, alunoRepository, planoRepository, null);
     }
@@ -80,8 +80,7 @@ public class MatriculaArquivo extends MatriculaRepository {
         }
     }
 
-    // Formato: id;idAluno;idPlano;dataInicio;status;idRecepcionista;diasTrancados
-    // (idRecepcionista = 0 quando a matrícula ainda não foi confirmada)
+    // formato: id;idAluno;idPlano;dataInicio;status;idRecepcionista;diasTrancados (0 = sem recepcionista)
     private String paraLinha(Matricula m) {
 
         int idRecepcionista = 0;
@@ -104,7 +103,7 @@ public class MatriculaArquivo extends MatriculaRepository {
 
         String[] p = linha.split(";", -1);
 
-        // aceita o formato antigo (5 campos) e o novo (7 campos)
+        // aceita o formato antigo (5) e o novo (7)
         if (p.length != 5 && p.length != 7) {
             throw new IllegalArgumentException("Linha inválida no arquivo: " + linha);
         }

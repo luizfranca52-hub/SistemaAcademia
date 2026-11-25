@@ -14,7 +14,7 @@ public class PagamentoArquivo extends PagamentoRepository {
     private final Path arquivo;
     private final MatriculaRepository matriculaRepository;
 
-    // não precisa mais do AlunoRepository: o aluno vem pela matrícula
+    // n precisa mais do AlunoRepository, o aluno vem pela matrícula
     public PagamentoArquivo(String caminho, MatriculaRepository matriculaRepository) {
         this.arquivo = Paths.get(caminho);
         this.matriculaRepository = matriculaRepository;
@@ -65,10 +65,7 @@ public class PagamentoArquivo extends PagamentoRepository {
     }
 
 
-    // Formato: id;idMatricula;valor;dataPagamento;TIPO;extras
-    //   PIX      -> ...;PIX;percentualDesconto
-    //   CARTAO   -> ...;CARTAO;parcelas;credito
-    //   DINHEIRO -> ...;DINHEIRO;valorRecebido
+    // formato: id;idMatricula;valor;data;TIPO;extras (pix: desconto | cartao: parcelas;credito | dinheiro: valorRecebido)
     private String paraLinha(Pagamento p) {
 
         String inicio = String.join(";",

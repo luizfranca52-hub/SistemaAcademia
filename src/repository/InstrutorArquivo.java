@@ -56,7 +56,7 @@ public class InstrutorArquivo extends InstrutorRepository{
         }
     }
 
-    // Formato: id;nome;cpf;dataNascimento;telefone;salarioBase;dataAdmissao;login;senha;cref;cargaHorariaSemanal
+    // formato: id;nome;cpf;dataNascimento;telefone;salarioBase;dataAdmissao;login;senha;cref;cargaHorariaSemanal
     private String paraLinha(Instrutor i) {
 
         return String.join(";",

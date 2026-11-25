@@ -17,7 +17,7 @@ public abstract class Funcionario extends Pessoa implements Autenticavel {
         this.senha = senha;
     }
 
-    // cada tipo de funcionário calcula do seu jeito (polimorfismo)
+    // cada um calcula do seu jeito (polimorfismo)
     public abstract double calcularSalario();
 
     @Override

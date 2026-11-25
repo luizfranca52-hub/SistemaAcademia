@@ -1,6 +1,6 @@
 package exception;
 
-// Lançada quando um id buscado não existe
+// qnd n acha o id
 public class EntidadeNaoEncontradaException extends RegraNegocioException {
 
     public EntidadeNaoEncontradaException(String mensagem) {

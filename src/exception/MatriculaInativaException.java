@@ -1,6 +1,6 @@
 package exception;
 
-// Lançada quando uma ação exige matrícula ATIVA e ela não está
+// qnd precisa de matrícula ativa e n ta
 public class MatriculaInativaException extends RegraNegocioException {
 
     public MatriculaInativaException(String mensagem) {

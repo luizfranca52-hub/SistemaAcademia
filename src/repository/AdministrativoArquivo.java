@@ -56,7 +56,7 @@ public class AdministrativoArquivo extends AdministrativoRepository{
         }
     }
 
-    // Formato: id;nome;cpf;dataNascimento;telefone;salarioBase;dataAdmissao;login;senha;cargo
+    // formato: id;nome;cpf;dataNascimento;telefone;salarioBase;dataAdmissao;login;senha;cargo
     private String paraLinha(Administrativo a) {
 
         return String.join(";",

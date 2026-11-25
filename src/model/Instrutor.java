@@ -14,7 +14,7 @@ public class Instrutor extends Funcionario {
         this.cargaHorariaSemanal = cargaHorariaSemanal;
     }
 
-    // salário base + R$ 30 por hora que passar de 20h semanais
+    // base + 30 reais por hora q passar de 20h na semana
     @Override
     public double calcularSalario() {
         double salario = getSalarioBase();

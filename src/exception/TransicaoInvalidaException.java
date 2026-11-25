@@ -1,6 +1,6 @@
 package exception;
 
-// Lançada quando a matrícula tenta mudar para um status não permitido
+// qnd tenta mudar o status da matrícula de um jeito q n pode
 public class TransicaoInvalidaException extends RegraNegocioException {
 
     public TransicaoInvalidaException(String mensagem) {

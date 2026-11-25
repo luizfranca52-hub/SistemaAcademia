@@ -16,7 +16,7 @@ public class Recepcionista extends Funcionario {
         this.matriculasRealizadas = matriculasRealizadas;
     }
 
-    // chamado quando a recepcionista confirma a matrícula de um aluno
+    // conta mais uma matrícula pra meta
     public void registrarMatricula() {
         matriculasRealizadas++;
     }
@@ -25,7 +25,7 @@ public class Recepcionista extends Funcionario {
         return matriculasRealizadas >= metaMatriculas;
     }
 
-    // salário base + 15% se for do turno da noite + R$ 300 de bônus se bater a meta
+    // base + 15% se for noite + 300 se bater a meta
     @Override
     public double calcularSalario() {
         double salario = getSalarioBase();

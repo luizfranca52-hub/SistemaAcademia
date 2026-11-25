@@ -12,7 +12,7 @@ public class Administrativo extends Funcionario {
         this.cargo = cargo;
     }
 
-    // salário base + 20% de gratificação pelo cargo administrativo
+    // base + 20% de gratificação
     @Override
     public double calcularSalario() {
         return getSalarioBase() * 1.20;

@@ -10,7 +10,7 @@ public class PagamentoPix extends Pagamento {
         this.percentualDesconto = percentualDesconto;
     }
 
-    // pix tem desconto (padrão da academia: 5%)
+    // pix tem desconto
     @Override
     public double calcularValorFinal() {
         return getValor() - getValor() * percentualDesconto / 100;

@@ -15,7 +15,7 @@ public class PagamentoDinheiro extends Pagamento {
         this.valorRecebido = valorRecebido;
     }
 
-    // dinheiro não tem desconto nem juros
+    // dinheiro n tem desconto nem juros
     @Override
     public double calcularValorFinal() {
         return getValor();

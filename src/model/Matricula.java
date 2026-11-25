@@ -11,8 +11,8 @@ public class Matricula {
     private LocalDate dataInicio;
     private LocalDate dataFim;
     private StatusMatricula status;
-    private Recepcionista recepcionista; // quem confirmou a matrícula (null enquanto PENDENTE)
-    private int diasTrancados;          // 0 = nunca foi trancada
+    private Recepcionista recepcionista; // quem confirmou (null enqt ta pendente)
+    private int diasTrancados;          // 0 = nunca trancou
 
     public Matricula(int id, Aluno aluno, Plano plano, LocalDate dataInicio, StatusMatricula status) {
         this(id, aluno, plano, dataInicio, status, null, 0);
@@ -30,7 +30,7 @@ public class Matricula {
         calcularDataFim();
     }
 
-    // fim = início + meses do plano + dias que ficou trancada
+    // fim = inicio + meses do plano + dias trancados
     public void calcularDataFim() {
         this.dataFim = dataInicio.plusMonths(plano.getTipo().getMeses()).plusDays(diasTrancados);
     }
@@ -39,9 +39,7 @@ public class Matricula {
         return status == StatusMatricula.ATIVA;
     }
 
-    // ===== Transições de status (estado dinâmico) =====
-
-    // PENDENTE -> ATIVA: matrícula feita online só vale depois que a recepção confirma a assinatura
+    // pendente -> ativa, a recepção confirma a assinatura
     public void confirmarAssinatura(Recepcionista recepcionista) {
         if (status != StatusMatricula.PENDENTE) {
             throw new TransicaoInvalidaException("Só matrícula PENDENTE pode ter a assinatura confirmada. Status atual: " + status);
@@ -51,7 +49,7 @@ public class Matricula {
         this.status = StatusMatricula.ATIVA;
     }
 
-    // ATIVA -> TRANCADA: no máximo 30 dias e só 1 vez por matrícula; os dias são somados no fim
+    // ativa -> trancada, até 30 dias e só 1 vez
     public void trancar(int dias) {
         if (status != StatusMatricula.ATIVA) {
             throw new TransicaoInvalidaException("Só matrícula ATIVA pode ser trancada. Status atual: " + status);
@@ -67,7 +65,7 @@ public class Matricula {
         this.status = StatusMatricula.TRANCADA;
     }
 
-    // TRANCADA -> ATIVA
+    // trancada -> ativa
     public void reativar() {
         if (status != StatusMatricula.TRANCADA) {
             throw new TransicaoInvalidaException("Só matrícula TRANCADA pode ser reativada. Status atual: " + status);
@@ -75,7 +73,7 @@ public class Matricula {
         this.status = StatusMatricula.ATIVA;
     }
 
-    // qualquer status (menos CANCELADA) -> CANCELADA. Cancelada não volta mais.
+    // qlqr status -> cancelada, dps n volta mais
     public void cancelar() {
         if (status == StatusMatricula.CANCELADA) {
             throw new TransicaoInvalidaException("Essa matrícula já está cancelada.");
@@ -83,7 +81,7 @@ public class Matricula {
         this.status = StatusMatricula.CANCELADA;
     }
 
-    // ATIVA -> VENCIDA: só se a data de fim já passou
+    // ativa -> vencida, só se já passou da data fim
     public void vencer(LocalDate hoje) {
         if (status != StatusMatricula.ATIVA) {
             throw new TransicaoInvalidaException("Só matrícula ATIVA pode vencer. Status atual: " + status);
@@ -94,7 +92,7 @@ public class Matricula {
         this.status = StatusMatricula.VENCIDA;
     }
 
-    // VENCIDA -> ATIVA: só acontece quando um pagamento é registrado; começa um novo período
+    // vencida -> ativa, qnd paga de novo
     public void renovar(LocalDate novaDataInicio) {
         if (status != StatusMatricula.VENCIDA) {
             throw new TransicaoInvalidaException("Só matrícula VENCIDA pode ser renovada. Status atual: " + status);
@@ -108,8 +106,6 @@ public class Matricula {
     public boolean podeReceberPagamento() {
         return status != StatusMatricula.CANCELADA;
     }
-
-    // ===== Getters e setters =====
 
     public int getId() {
         return id;

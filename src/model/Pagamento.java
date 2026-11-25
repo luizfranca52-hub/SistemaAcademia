@@ -20,10 +20,10 @@ public abstract class Pagamento {
         this.dataPagamento = dataPagamento;
     }
 
-    // cada forma de pagamento calcula o valor final do seu jeito (polimorfismo)
+    // cada forma calcula do seu jeito (polimorfismo)
     public abstract double calcularValorFinal();
 
-    // o aluno vem pela matrícula, não precisa guardar de novo
+    // aluno vem pela matrícula
     public Aluno getAluno() {
         return matricula.getAluno();
     }

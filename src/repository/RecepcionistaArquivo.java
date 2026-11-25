@@ -59,7 +59,7 @@ public class RecepcionistaArquivo extends RecepcionistaRepository {
         }
     }
 
-    // Formato: id;nome;cpf;dataNascimento;telefone;salarioBase;dataAdmissao;login;senha;turno;metaMatriculas;matriculasRealizadas
+    // formato: id;nome;cpf;dataNascimento;telefone;salarioBase;dataAdmissao;login;senha;turno;metaMatriculas;matriculasRealizadas
     private String paraLinha(Recepcionista r) {
 
         return String.join(";",
