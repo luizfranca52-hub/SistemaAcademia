@@ -2,6 +2,7 @@ package repository;
 import model.Matricula;
 import model.Aluno;
 import model.Plano;
+import model.Recepcionista;
 import model.StatusMatricula;
 
 import java.io.IOException;
@@ -17,12 +18,20 @@ public class MatriculaArquivo extends MatriculaRepository {
     private final Path arquivo;
     private final AlunoRepository alunoRepository;
     private final PlanoRepository planoRepository;
+    private final RecepcionistaRepository recepcionistaRepository;
 
+    // construtor antigo continua funcionando (sem recepcionista)
     public MatriculaArquivo(String caminho, AlunoRepository alunoRepository, PlanoRepository planoRepository) {
+        this(caminho, alunoRepository, planoRepository, null);
+    }
+
+    public MatriculaArquivo(String caminho, AlunoRepository alunoRepository, PlanoRepository planoRepository,
+                            RecepcionistaRepository recepcionistaRepository) {
 
         this.arquivo = Paths.get(caminho);
         this.alunoRepository = alunoRepository;
         this.planoRepository = planoRepository;
+        this.recepcionistaRepository = recepcionistaRepository;
 
         carregar();
     }
@@ -71,15 +80,23 @@ public class MatriculaArquivo extends MatriculaRepository {
         }
     }
 
-    // Formato: id;idAluno;idPlano;dataInicio;status
+    // Formato: id;idAluno;idPlano;dataInicio;status;idRecepcionista;diasTrancados
+    // (idRecepcionista = 0 quando a matrícula ainda não foi confirmada)
     private String paraLinha(Matricula m) {
+
+        int idRecepcionista = 0;
+        if (m.getRecepcionista() != null) {
+            idRecepcionista = m.getRecepcionista().getId();
+        }
 
         return String.join(";",
                 String.valueOf(m.getId()),
                 String.valueOf(m.getAluno().getId()),
                 String.valueOf(m.getPlano().getId()),
                 m.getDataInicio().toString(),
-                m.getStatus().name()
+                m.getStatus().name(),
+                String.valueOf(idRecepcionista),
+                String.valueOf(m.getDiasTrancados())
         );
     }
 
@@ -87,7 +104,8 @@ public class MatriculaArquivo extends MatriculaRepository {
 
         String[] p = linha.split(";", -1);
 
-        if (p.length != 5) {
+        // aceita o formato antigo (5 campos) e o novo (7 campos)
+        if (p.length != 5 && p.length != 7) {
             throw new IllegalArgumentException("Linha inválida no arquivo: " + linha);
         }
 
@@ -101,7 +119,19 @@ public class MatriculaArquivo extends MatriculaRepository {
 
         LocalDate dataInicio = LocalDate.parse(p[3]);
         StatusMatricula status = StatusMatricula.valueOf(p[4]);
-        return new Matricula(id, aluno, plano, dataInicio, status);
+
+        Recepcionista recepcionista = null;
+        int diasTrancados = 0;
+
+        if (p.length == 7) {
+            Integer idRecepcionista = Integer.parseInt(p[5]);
+            if (idRecepcionista != 0 && recepcionistaRepository != null) {
+                recepcionista = recepcionistaRepository.buscarPorId(idRecepcionista).orElseThrow(() -> new IllegalArgumentException("Recepcionista não encontrada: " + idRecepcionista));
+            }
+            diasTrancados = Integer.parseInt(p[6]);
+        }
+
+        return new Matricula(id, aluno, plano, dataInicio, status, recepcionista, diasTrancados);
     }
 }
 

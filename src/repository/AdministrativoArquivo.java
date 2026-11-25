@@ -56,7 +56,7 @@ public class AdministrativoArquivo extends AdministrativoRepository{
         }
     }
 
-    // Formato que a classe pede: id;nome;cpf;dataNascimento;telefone;login;senha
+    // Formato: id;nome;cpf;dataNascimento;telefone;salarioBase;dataAdmissao;login;senha;cargo
     private String paraLinha(Administrativo a) {
 
         return String.join(";",
@@ -65,9 +65,11 @@ public class AdministrativoArquivo extends AdministrativoRepository{
                 a.getCpf(),
                 a.getDataNascimento().toString(),
                 a.getTelefone(),
-                a.getCargo(),
+                String.valueOf(a.getSalarioBase()),
+                a.getDataAdmissao().toString(),
                 a.getLogin(),
-                a.getSenha()
+                a.getSenha(),
+                a.getCargo()
         );
     }
 
@@ -75,10 +77,12 @@ public class AdministrativoArquivo extends AdministrativoRepository{
 
         String[] p = linha.split(";", -1);
 
-        if (p.length != 8) {
+        if (p.length != 10) {
             throw new IllegalArgumentException("Linha inválida no arquivo: " + linha);
         }
 
-        return new Administrativo(Integer.parseInt(p[0]), p[1], p[2], LocalDate.parse(p[3]), p[4], p[5], p[6], p[7]);
+        return new Administrativo(Integer.parseInt(p[0]), p[1], p[2], LocalDate.parse(p[3]), p[4],
+                Double.parseDouble(p[5]), LocalDate.parse(p[6]), p[7], p[8],
+                p[9]);
     }
 }

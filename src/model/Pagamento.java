@@ -1,26 +1,31 @@
 package model;
 
+import exception.PagamentoInvalidoException;
+
 import java.time.LocalDate;
 
-public class Pagamento {
+public abstract class Pagamento {
     private int id;
-    private Aluno aluno;
     private Matricula matricula;
     private double valor;
     private LocalDate dataPagamento;
-    private FormaPagamento forma;
 
-    public Pagamento(int id, Aluno aluno, Matricula matricula, double valor, LocalDate dataPagamento, FormaPagamento forma) {
+    public Pagamento(int id, Matricula matricula, double valor, LocalDate dataPagamento) {
+        if (valor <= 0) {
+            throw new PagamentoInvalidoException("O valor do pagamento precisa ser maior que zero.");
+        }
         this.id = id;
-        this.aluno = aluno;
         this.matricula = matricula;
         this.valor = valor;
         this.dataPagamento = dataPagamento;
-        this.forma = forma;
     }
 
+    // cada forma de pagamento calcula o valor final do seu jeito (polimorfismo)
+    public abstract double calcularValorFinal();
+
+    // o aluno vem pela matrícula, não precisa guardar de novo
     public Aluno getAluno() {
-        return aluno;
+        return matricula.getAluno();
     }
 
     public int getId() {
@@ -37,13 +42,5 @@ public class Pagamento {
 
     public LocalDate getDataPagamento() {
         return dataPagamento;
-    }
-
-    public FormaPagamento getForma() {
-        return forma;
-    }
-
-    public void setForma(FormaPagamento forma) {
-        this.forma = forma;
     }
 }

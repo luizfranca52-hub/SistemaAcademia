@@ -2,46 +2,32 @@ package model;
 
 import java.time.LocalDate;
 
-public class Administrativo extends Pessoa implements Autenticavel{
+public class Administrativo extends Funcionario {
     private String cargo;
-    private String login;
-    private String senha;
 
-
-    public Administrativo(int id, String nome, String cpf, LocalDate dataNascimento, String telefone, String cargo, String login, String senha) {
-        super(id, nome, cpf, dataNascimento, telefone);
+    public Administrativo(int id, String nome, String cpf, LocalDate dataNascimento, String telefone,
+                          double salarioBase, LocalDate dataAdmissao, String login, String senha,
+                          String cargo) {
+        super(id, nome, cpf, dataNascimento, telefone, salarioBase, dataAdmissao, login, senha);
         this.cargo = cargo;
-        this.login = login;
-        this.senha = senha;
     }
 
-    public void exibirResumo(){
-        System.out.println("O nome do funcionario administrativo é: " + this.nome + " Ele nasceu em: " + this.dataNascimento + " \nPara entrar em contato: "+ this.telefone);
+    // salário base + 20% de gratificação pelo cargo administrativo
+    @Override
+    public double calcularSalario() {
+        return getSalarioBase() * 1.20;
     }
 
-    public boolean autenticar(String login, String senha) { return this.login.equals(login) && this.senha.equals(senha);}
+    @Override
+    public void exibirResumo() {
+        System.out.println("O nome do funcionario administrativo é: " + this.nome + " Ele nasceu em: " + this.dataNascimento + " \nPara entrar em contato: " + this.telefone);
+    }
 
     public String getCargo() {
         return cargo;
     }
 
     public void setCargo(String cargo) {
-        cargo = cargo;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getSenha() {
-        return senha;
-    }
-
-    public void setSenha(String senha) {
-        this.senha = senha;
+        this.cargo = cargo;
     }
 }
