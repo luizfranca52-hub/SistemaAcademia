@@ -2,7 +2,6 @@ package repository;
 
 import model.Aluno;
 import model.Equipamento;
-import model.FormaPagamento;
 import model.StatusEquipamento;
 
 import java.io.IOException;

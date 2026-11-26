@@ -12,12 +12,11 @@ import java.util.List;
 
 public class PagamentoArquivo extends PagamentoRepository {
     private final Path arquivo;
-    private final AlunoRepository alunoRepository;
     private final MatriculaRepository matriculaRepository;
 
-    public PagamentoArquivo(String caminho, AlunoRepository alunoRepository, MatriculaRepository matriculaRepository) {
+    // n precisa mais do AlunoRepository, o aluno vem pela matrícula
+    public PagamentoArquivo(String caminho, MatriculaRepository matriculaRepository) {
         this.arquivo = Paths.get(caminho);
-        this.alunoRepository = alunoRepository;
         this.matriculaRepository = matriculaRepository;
 
         carregar();
@@ -66,36 +65,52 @@ public class PagamentoArquivo extends PagamentoRepository {
     }
 
 
+    // formato: id;idMatricula;valor;data;TIPO;extras (pix: desconto | cartao: parcelas;credito | dinheiro: valorRecebido)
     private String paraLinha(Pagamento p) {
 
-        return String.join(";",
-                  String.valueOf(p.getId()),
-                  String.valueOf(p.getAluno().getId()),
-                  String.valueOf(p.getMatricula().getId()),
-                  String.valueOf(p.getValor()),
-                  p.getDataPagamento().toString(),
-                  p.getForma().name()
+        String inicio = String.join(";",
+                String.valueOf(p.getId()),
+                String.valueOf(p.getMatricula().getId()),
+                String.valueOf(p.getValor()),
+                p.getDataPagamento().toString()
         );
+
+        if (p instanceof PagamentoPix) {
+            PagamentoPix pix = (PagamentoPix) p;
+            return inicio + ";PIX;" + pix.getPercentualDesconto();
+        }
+        if (p instanceof PagamentoCartao) {
+            PagamentoCartao cartao = (PagamentoCartao) p;
+            return inicio + ";CARTAO;" + cartao.getParcelas() + ";" + cartao.isCredito();
+        }
+        PagamentoDinheiro dinheiro = (PagamentoDinheiro) p;
+        return inicio + ";DINHEIRO;" + dinheiro.getValorRecebido();
     }
 
     private Pagamento paraPagamento(String linha) {
 
         String[] p = linha.split(";", -1);
 
-        if (p.length != 6) {
+        if (p.length < 6) {
             throw new IllegalArgumentException("Linha inválida no arquivo: " + linha);
         }
 
-        Integer id = Integer.parseInt(p[0]);
-        Integer idAluno = Integer.parseInt(p[1]);
-        Integer idMatricula = Integer.parseInt(p[2]);
+        int id = Integer.parseInt(p[0]);
+        Integer idMatricula = Integer.parseInt(p[1]);
+        Matricula matricula = matriculaRepository.buscarPorId(idMatricula).orElseThrow(() -> new IllegalArgumentException("Matrícula não encontrada: " + idMatricula));
+        double valor = Double.parseDouble(p[2]);
+        LocalDate dataPagamento = LocalDate.parse(p[3]);
+        String tipo = p[4];
 
-        Aluno aluno = alunoRepository.buscarPorId(idAluno).orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado: " + idAluno));
-        Matricula matricula= matriculaRepository.buscarPorId(idMatricula).orElseThrow(() -> new IllegalArgumentException("Plano não encontrado: " + idMatricula));
-        double valor = Double.parseDouble(p[3]);
-        LocalDate dataPagamento = LocalDate.parse(p[4]);
-        FormaPagamento forma = FormaPagamento.valueOf(p[5]);
-
-         return new Pagamento(id, aluno, matricula, valor, dataPagamento, forma);
+        if (tipo.equals("PIX")) {
+            return new PagamentoPix(id, matricula, valor, dataPagamento, Double.parseDouble(p[5]));
+        }
+        if (tipo.equals("CARTAO")) {
+            return new PagamentoCartao(id, matricula, valor, dataPagamento, Integer.parseInt(p[5]), Boolean.parseBoolean(p[6]));
+        }
+        if (tipo.equals("DINHEIRO")) {
+            return new PagamentoDinheiro(id, matricula, valor, dataPagamento, Double.parseDouble(p[5]));
+        }
+        throw new IllegalArgumentException("Tipo de pagamento desconhecido: " + tipo);
     }
 }

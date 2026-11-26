@@ -56,12 +56,15 @@ public class InstrutorArquivo extends InstrutorRepository{
         }
     }
 
+    // formato: id;nome;cpf;dataNascimento;telefone;salarioBase;dataAdmissao;login;senha;cref;cargaHorariaSemanal
     private String paraLinha(Instrutor i) {
 
         return String.join(";",
-                    i.getCref(), i.getLogin(), i.getSenha(),
-                    String.valueOf(i.getSalario()), String.valueOf(i.getId()), i.getNome(),
-                    i.getCpf(), i.getDataNascimento().toString(), i.getTelefone()
+                String.valueOf(i.getId()), i.getNome(), i.getCpf(),
+                i.getDataNascimento().toString(), i.getTelefone(),
+                String.valueOf(i.getSalarioBase()), i.getDataAdmissao().toString(),
+                i.getLogin(), i.getSenha(),
+                i.getCref(), String.valueOf(i.getCargaHorariaSemanal())
         );
     }
 
@@ -69,10 +72,12 @@ public class InstrutorArquivo extends InstrutorRepository{
 
         String[] p = linha.split(";", -1);
 
-        if (p.length != 9) {
+        if (p.length != 11) {
             throw new IllegalArgumentException("Linha inválida no arquivo: " + linha);
         }
 
-        return new Instrutor(p[0], p[1], p[2], Double.parseDouble(p[3]), Integer.parseInt(p[4]), p[5], p[6], LocalDate.parse(p[7]), p[8]);
+        return new Instrutor(Integer.parseInt(p[0]), p[1], p[2], LocalDate.parse(p[3]), p[4],
+                Double.parseDouble(p[5]), LocalDate.parse(p[6]), p[7], p[8],
+                p[9], Integer.parseInt(p[10]));
     }
 }
