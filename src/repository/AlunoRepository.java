@@ -22,8 +22,4 @@ public class AlunoRepository extends RepositoryGeral<Aluno, Integer> {
     public boolean existePorId(Integer id) {
         return buscarComChave(id).isPresent();
     }
-
-    public Optional<Aluno> autenticar(String login, String senha) {
-        return listarTodos().stream().filter(a -> a.autenticar(login, senha)).findFirst();
-    }
 }

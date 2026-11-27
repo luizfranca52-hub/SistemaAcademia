@@ -22,8 +22,4 @@ public class RecepcionistaRepository extends RepositoryGeral<Recepcionista, Inte
     public boolean existePorId(Integer id) {
         return buscarComChave(id).isPresent();
     }
-
-    public Optional<Recepcionista> autenticar(String login, String senha) {
-        return listarTodos().stream().filter(r -> r.autenticar(login, senha)).findFirst();
-    }
 }

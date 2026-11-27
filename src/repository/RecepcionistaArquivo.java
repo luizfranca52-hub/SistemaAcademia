@@ -59,7 +59,7 @@ public class RecepcionistaArquivo extends RecepcionistaRepository {
         }
     }
 
-    // formato: id;nome;cpf;dataNascimento;telefone;salarioBase;dataAdmissao;login;senha;turno;metaMatriculas;matriculasRealizadas
+    // formato: id;nome;cpf;dataNascimento;telefone;salarioBase;dataAdmissao;turno;metaMatriculas;matriculasRealizadas
     private String paraLinha(Recepcionista r) {
 
         return String.join(";",
@@ -70,8 +70,6 @@ public class RecepcionistaArquivo extends RecepcionistaRepository {
                 r.getTelefone(),
                 String.valueOf(r.getSalarioBase()),
                 r.getDataAdmissao().toString(),
-                r.getLogin(),
-                r.getSenha(),
                 r.getTurno().name(),
                 String.valueOf(r.getMetaMatriculas()),
                 String.valueOf(r.getMatriculasRealizadas())
@@ -82,12 +80,12 @@ public class RecepcionistaArquivo extends RecepcionistaRepository {
 
         String[] p = linha.split(";", -1);
 
-        if (p.length != 12) {
+        if (p.length != 10) {
             throw new IllegalArgumentException("Linha inválida no arquivo: " + linha);
         }
 
         return new Recepcionista(Integer.parseInt(p[0]), p[1], p[2], LocalDate.parse(p[3]), p[4],
-                Double.parseDouble(p[5]), LocalDate.parse(p[6]), p[7], p[8],
-                Turno.valueOf(p[9]), Integer.parseInt(p[10]), Integer.parseInt(p[11]));
+                Double.parseDouble(p[5]), LocalDate.parse(p[6]),
+                Turno.valueOf(p[7]), Integer.parseInt(p[8]), Integer.parseInt(p[9]));
     }
 }

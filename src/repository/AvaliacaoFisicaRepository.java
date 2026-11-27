@@ -1,5 +1,6 @@
 package repository;
 import model.AvaliacaoFisica;
+import model.Pessoa;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,9 +15,11 @@ public class AvaliacaoFisicaRepository extends RepositoryGeral<AvaliacaoFisica, 
         return buscarComChave(id);
     }
 
-    public List<AvaliacaoFisica> buscarPorAluno(Integer idAluno) {
+    // histórico de avaliações de uma pessoa (aluno ou funcionário)
+    // compara a classe tbm pq os ids se repetem entre os tipos de pessoa
+    public List<AvaliacaoFisica> buscarPorAvaliado(Pessoa pessoa) {
         return listarTodos().stream()
-                .filter(a -> a.getAluno().getId() == idAluno)
+                .filter(a -> a.getAvaliado().getClass() == pessoa.getClass() && a.getAvaliado().getId() == pessoa.getId())
                 .toList();
     }
 

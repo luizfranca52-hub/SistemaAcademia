@@ -54,7 +54,13 @@ public class AlunoArquivo extends AlunoRepository {
     }
 
     // Formato que a classe pede: id;nome;cpf;dataNascimento;telefone;login;senha
+    // formato: id;nome;cpf;dataNascimento;telefone;responsavel
     private String paraLinha(Aluno a) {
+
+        String responsavel = "";
+        if (a.getResponsavel() != null) {
+            responsavel = a.getResponsavel();
+        }
 
         return String.join(";",
                 String.valueOf(a.getId()),
@@ -62,8 +68,7 @@ public class AlunoArquivo extends AlunoRepository {
                 a.getCpf(),
                 a.getDataNascimento().toString(),
                 a.getTelefone(),
-                a.getLogin(),
-                a.getSenha()
+                responsavel
         );
     }
 
@@ -71,10 +76,10 @@ public class AlunoArquivo extends AlunoRepository {
 
         String[] p = linha.split(";", -1);
 
-        if (p.length != 7) {
+        if (p.length != 6) {
             throw new IllegalArgumentException("Linha inválida no arquivo: " + linha);
         }
 
-        return new Aluno(Integer.parseInt(p[0]), p[1], p[2], LocalDate.parse(p[3]), p[4], p[5], p[6]);
+        return new Aluno(Integer.parseInt(p[0]), p[1], p[2], LocalDate.parse(p[3]), p[4], p[5]);
     }
 }

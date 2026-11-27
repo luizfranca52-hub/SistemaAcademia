@@ -22,8 +22,4 @@ public class AdministrativoRepository extends RepositoryGeral<Administrativo, In
     public boolean existePorId(Integer id) {
         return buscarComChave(id).isPresent();
     }
-
-    public Optional<Administrativo> autenticar(String login, String senha) {
-        return listarTodos().stream().filter(a -> a.autenticar(login, senha)).findFirst();
-    }
 }

@@ -2,6 +2,7 @@ package repository;
 
 import model.Administrativo;
 import model.Plano;
+import model.StatusPlano;
 import model.TipoPlano;
 
 import java.io.IOException;
@@ -57,13 +58,15 @@ public class PlanoArquivo extends PlanoRepository{
         }
     }
 
+    // formato: id;nome;valor;tipo;status
     private String paraLinha(Plano p) {
 
         return String.join(";",
                 String.valueOf(p.getId()),
                 p.getNome(),
                 String.valueOf(p.getValor()),
-                p.getTipo().name()
+                p.getTipo().name(),
+                p.getStatus().name()
         );
     }
 
@@ -71,10 +74,16 @@ public class PlanoArquivo extends PlanoRepository{
 
         String[] p = linha.split(";", -1);
 
-        if (p.length != 4) {
+        // aceita o formato antigo (4, sem status) e o novo (5)
+        if (p.length != 4 && p.length != 5) {
             throw new IllegalArgumentException("Linha inválida no arquivo: " + linha);
         }
 
-        return new Plano(Integer.parseInt(p[0]), p[1], Double.parseDouble(p[2]), TipoPlano.valueOf(p[3]));
+        StatusPlano status = StatusPlano.ATIVO;
+        if (p.length == 5) {
+            status = StatusPlano.valueOf(p[4]);
+        }
+
+        return new Plano(Integer.parseInt(p[0]), p[1], Double.parseDouble(p[2]), TipoPlano.valueOf(p[3]), status);
     }
 }

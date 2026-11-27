@@ -7,9 +7,9 @@ public class Instrutor extends Funcionario {
     private int cargaHorariaSemanal;
 
     public Instrutor(int id, String nome, String cpf, LocalDate dataNascimento, String telefone,
-                     double salarioBase, LocalDate dataAdmissao, String login, String senha,
+                     double salarioBase, LocalDate dataAdmissao,
                      String cref, int cargaHorariaSemanal) {
-        super(id, nome, cpf, dataNascimento, telefone, salarioBase, dataAdmissao, login, senha);
+        super(id, nome, cpf, dataNascimento, telefone, salarioBase, dataAdmissao);
         this.cref = cref;
         this.cargaHorariaSemanal = cargaHorariaSemanal;
     }

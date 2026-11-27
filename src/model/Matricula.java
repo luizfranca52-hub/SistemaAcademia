@@ -1,5 +1,6 @@
 package model;
 
+import exception.PlanoDescontinuadoException;
 import exception.TransicaoInvalidaException;
 
 import java.time.LocalDate;
@@ -96,6 +97,9 @@ public class Matricula {
     public void renovar(LocalDate novaDataInicio) {
         if (status != StatusMatricula.VENCIDA) {
             throw new TransicaoInvalidaException("Só matrícula VENCIDA pode ser renovada. Status atual: " + status);
+        }
+        if (!plano.aceitaNovaMatricula()) {
+            throw new PlanoDescontinuadoException("O plano " + plano.getNome() + " foi descontinuado, escolha outro plano.");
         }
         this.dataInicio = novaDataInicio;
         this.diasTrancados = 0;

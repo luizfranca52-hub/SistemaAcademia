@@ -4,15 +4,15 @@
 
     public class AvaliacaoFisica {
         private int id;
-        private Aluno aluno;
+        private Pessoa avaliado; // pode ser aluno ou funcionário
         private Instrutor instrutor;
         private LocalDate data;
         private double peso;
         private double altura;
 
-        public AvaliacaoFisica(int id, Aluno aluno, Instrutor instrutor, LocalDate data, double peso, double altura) {
+        public AvaliacaoFisica(int id, Pessoa avaliado, Instrutor instrutor, LocalDate data, double peso, double altura) {
             this.id = id;
-            this.aluno = aluno;
+            this.avaliado = avaliado;
             this.instrutor = instrutor;
             this.data = data;
             this.peso = peso;
@@ -40,12 +40,12 @@
             this.id = id;
         }
 
-        public Aluno getAluno() {
-            return aluno;
+        public Pessoa getAvaliado() {
+            return avaliado;
         }
 
-        public void setAluno(Aluno aluno) {
-            this.aluno = aluno;
+        public void setAvaliado(Pessoa avaliado) {
+            this.avaliado = avaliado;
         }
 
         public Instrutor getInstrutor() {

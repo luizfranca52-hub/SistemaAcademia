@@ -8,9 +8,9 @@ public class Recepcionista extends Funcionario {
     private int matriculasRealizadas;
 
     public Recepcionista(int id, String nome, String cpf, LocalDate dataNascimento, String telefone,
-                         double salarioBase, LocalDate dataAdmissao, String login, String senha,
+                         double salarioBase, LocalDate dataAdmissao,
                          Turno turno, int metaMatriculas, int matriculasRealizadas) {
-        super(id, nome, cpf, dataNascimento, telefone, salarioBase, dataAdmissao, login, senha);
+        super(id, nome, cpf, dataNascimento, telefone, salarioBase, dataAdmissao);
         this.turno = turno;
         this.metaMatriculas = metaMatriculas;
         this.matriculasRealizadas = matriculasRealizadas;

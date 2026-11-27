@@ -5,12 +5,34 @@ public class Plano {
     private String nome; //Premium...
     private double valor;
     private TipoPlano tipo;
+    private StatusPlano status;
 
+    // plano novo já nasce ATIVO
     public Plano(int id, String nome, double valor, TipoPlano tipo) {
+        this(id, nome, valor, tipo, StatusPlano.ATIVO);
+    }
+
+    public Plano(int id, String nome, double valor, TipoPlano tipo, StatusPlano status) {
         this.id = id;
         this.nome = nome;
         this.valor = valor;
         this.tipo = tipo;
+        this.status = status;
+    }
+
+    // plano q a academia parou de vender n é apagado, só descontinuado
+    // (as matrículas antigas continuam apontando pra ele)
+    public void descontinuar() {
+        this.status = StatusPlano.DESCONTINUADO;
+    }
+
+    public void reativar() {
+        this.status = StatusPlano.ATIVO;
+    }
+
+    // descontinuado n aceita matrícula nova nem renovação
+    public boolean aceitaNovaMatricula() {
+        return status == StatusPlano.ATIVO;
     }
 
 public int calcularDuracaoMeses(){
@@ -44,5 +66,9 @@ public int calcularDuracaoMeses(){
     public TipoPlano getTipo() {
         return tipo;
 
+    }
+
+    public StatusPlano getStatus() {
+        return status;
     }
 }
