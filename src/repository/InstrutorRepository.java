@@ -23,8 +23,4 @@ public class InstrutorRepository extends RepositoryGeral<Instrutor, Integer>{
     public boolean existePorId(Integer id) {
         return buscarComChave(id).isPresent();
     }
-
-    public Optional<Instrutor> autenticar(String login, String senha) {
-        return listarTodos().stream().filter(a -> a.autenticar(login, senha)).findFirst();
-    }
 }

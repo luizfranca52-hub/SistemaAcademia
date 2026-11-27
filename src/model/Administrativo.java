@@ -6,9 +6,9 @@ public class Administrativo extends Funcionario {
     private String cargo;
 
     public Administrativo(int id, String nome, String cpf, LocalDate dataNascimento, String telefone,
-                          double salarioBase, LocalDate dataAdmissao, String login, String senha,
+                          double salarioBase, LocalDate dataAdmissao,
                           String cargo) {
-        super(id, nome, cpf, dataNascimento, telefone, salarioBase, dataAdmissao, login, senha);
+        super(id, nome, cpf, dataNascimento, telefone, salarioBase, dataAdmissao);
         this.cargo = cargo;
     }
 

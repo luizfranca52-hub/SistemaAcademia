@@ -1,0 +1,16 @@
+package model;
+
+// ações do sistema que precisam de permissão
+public enum Permissao {
+    GERENCIAR_PESSOAS,
+    GERENCIAR_PLANOS,
+    GERENCIAR_MATRICULAS,
+    REGISTRAR_PAGAMENTOS,
+    GERENCIAR_AULAS,
+    INSCREVER_EM_AULA,
+    GERENCIAR_TREINOS,
+    REGISTRAR_AVALIACOES,
+    GERENCIAR_EQUIPAMENTOS,
+    VER_RELATORIOS,
+    VER_PROPRIOS_DADOS
+}

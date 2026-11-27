@@ -11,12 +11,12 @@ import java.util.List;
 public class AvaliacaoFisicaArquivo extends AvaliacaoFisicaRepository {
 
     private final Path arquivo;
-    private final AlunoRepository alunoRepository;
+    private final PessoaLocalizador pessoaLocalizador;
     private final InstrutorRepository instrutorRepository;
 
-    public AvaliacaoFisicaArquivo(String caminho, AlunoRepository alunoRepository, InstrutorRepository instrutorRepository) {
+    public AvaliacaoFisicaArquivo(String caminho, PessoaLocalizador pessoaLocalizador, InstrutorRepository instrutorRepository) {
         this.arquivo = Paths.get(caminho);
-        this.alunoRepository = alunoRepository;
+        this.pessoaLocalizador = pessoaLocalizador;
         this.instrutorRepository = instrutorRepository;
         carregar();
     }
@@ -63,10 +63,13 @@ public class AvaliacaoFisicaArquivo extends AvaliacaoFisicaRepository {
         }
     }
 
+    // formato: id;tipoAvaliado;idAvaliado;idInstrutor;data;peso;altura
+    // (tipoAvaliado = ALUNO, INSTRUTOR, ADMINISTRATIVO ou RECEPCIONISTA)
     private String paraLinha(AvaliacaoFisica a) {
         return String.join(";",
                 String.valueOf(a.getId()),
-                String.valueOf(a.getAluno().getId()),
+                pessoaLocalizador.tipoDe(a.getAvaliado()).name(),
+                String.valueOf(a.getAvaliado().getId()),
                 String.valueOf(a.getInstrutor().getId()),
                 a.getData().toString(),
                 String.valueOf(a.getPeso()),
@@ -78,21 +81,22 @@ public class AvaliacaoFisicaArquivo extends AvaliacaoFisicaRepository {
 
         String[] p = linha.split(";", -1);
 
-        if (p.length != 6) {
+        if (p.length != 7) {
             throw new IllegalArgumentException("Linha inválida no arquivo: " + linha);
         }
 
         Integer id = Integer.parseInt(p[0]);
-        Integer idAluno = Integer.parseInt(p[1]);
-        Integer idInstrutor = Integer.parseInt(p[2]);
-        LocalDate data = LocalDate.parse(p[3]);
-        double peso = Double.parseDouble(p[4]);
-        double altura = Double.parseDouble(p[5]);
+        Perfil tipoAvaliado = Perfil.valueOf(p[1]);
+        Integer idAvaliado = Integer.parseInt(p[2]);
+        Integer idInstrutor = Integer.parseInt(p[3]);
+        LocalDate data = LocalDate.parse(p[4]);
+        double peso = Double.parseDouble(p[5]);
+        double altura = Double.parseDouble(p[6]);
 
-        Aluno aluno = alunoRepository.buscarPorId(idAluno).orElseThrow(() -> new IllegalArgumentException("Aluno não encontrado: " + idAluno));
+        Pessoa avaliado = pessoaLocalizador.buscar(tipoAvaliado, idAvaliado);
 
         Instrutor instrutor = instrutorRepository.buscarPorId(idInstrutor).orElseThrow(() -> new IllegalArgumentException("Instrutor não encontrado: " + idInstrutor));
 
-        return new AvaliacaoFisica(id, aluno, instrutor, data, peso, altura);
+        return new AvaliacaoFisica(id, avaliado, instrutor, data, peso, altura);
     }
 }
