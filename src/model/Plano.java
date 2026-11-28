@@ -7,7 +7,7 @@ public class Plano {
     private TipoPlano tipo;
     private StatusPlano status;
 
-    // plano novo já nasce ATIVO
+        // plano novo já nasce ATIVO
     public Plano(int id, String nome, double valor, TipoPlano tipo) {
         this(id, nome, valor, tipo, StatusPlano.ATIVO);
     }
