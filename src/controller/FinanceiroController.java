@@ -5,6 +5,7 @@ import model.*;
 import repository.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FinanceiroController {
@@ -120,6 +121,41 @@ public class FinanceiroController {
 
 
 
+    public String alterarStatusMatricula(int idMatricula, StatusMatricula novoStatus) {
+        Matricula matricula = matriculaRepo.buscarPorId(idMatricula).orElse(null);
+        if (matricula == null) {
+            return "Erro: Matrícula não encontrada.";
+        }
+
+        // Regra de negócio: Vencida, trancada ou cancelada só voltam com pagamento
+        if (novoStatus == StatusMatricula.ATIVA && matricula.getStatus() != StatusMatricula.ATIVA) {
+            return "Erro: Matrícula vencida, trancada ou cancelada só pode ser reativada mediante pagamento.";
+        }
+
+        matricula.setStatus(novoStatus);
+        matriculaRepo.salvar(matricula);
+        return "Status da matrícula alterado para: " + novoStatus;
+    }
+
+
+
+
+
+    public List<Matricula> verificarInadimplencia() {
+        List<Matricula> inadimplentes = new ArrayList<>();
+        LocalDate hoje = LocalDate.now();
+
+        for (Matricula m : matriculaRepo.listarTodos()) {
+            if (m.getStatus() == StatusMatricula.ATIVA && m.getDataFim().isBefore(hoje)) {
+                m.setStatus(StatusMatricula.VENCIDA);
+                matriculaRepo.salvar(m);
+            }
+            if (m.getStatus() == StatusMatricula.VENCIDA) {
+                inadimplentes.add(m);
+            }
+        }
+        return inadimplentes;
+    }
 }
 //métodos: criarPlano(), listarPlanos(), realizarMatricula(), registrarPagamento(), alterarStatusMatricula(), verificarInadimplencia()
 //Gerencia plano, matricula e pagamento
